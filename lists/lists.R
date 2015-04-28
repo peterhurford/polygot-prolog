@@ -35,13 +35,6 @@ flatten(list("a", list("b", list("c", "d"))))
 # [1] "a" "b" "c" "d"
 
 ### 1.08 Eliminate consecutive duplicates of list elements.
-compress <- function(ll) {
-  ol <- list()
-  for (i in seq_along(ll)) {
-    if (i == length(ll)) { ol <- c(ol, ll[[i]]) }
-    else if (ll[[i]] != ll[[i+1]]) { ol <- c(ol, ll[[i]]) }
-  }
-  ol
-} #TODO: Is this really the most efficient implementation?
+compress <- function(ll) { list(rle(unlist(ll))$values) }
 compress(list("a", "a", "a", "a", "b", "c", "c", "a", "a", "d", "e", "e", "e", "e"))
 # list("a", "b", "c", "a", "d", "e")
