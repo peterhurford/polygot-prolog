@@ -38,3 +38,42 @@ flatten(list("a", list("b", list("c", "d"))))
 compress <- function(ll) { list(rle(unlist(ll))$values) }
 compress(list("a", "a", "a", "a", "b", "c", "c", "a", "a", "d", "e", "e", "e", "e"))
 # list("a", "b", "c", "a", "d", "e")
+
+### 1.09 Pack consecutive duplicates of list elements into sublists.
+pack <- function(ll) {
+  rll <- rle(unlist(ll))$lengths
+  ll <- compress(ll)[[1]]
+  ol <- list()
+  length(ol) <- length(ll)
+  for (i in seq_along(ll)) {
+    ol[[i]] <- list(rep(ll[[i]], rll[[i]]))
+  }
+  ol
+}
+pack(list("a", "a", "a", "a", "b", "c", "c", "a", "a", "d", "e", "e", "e", "e"))
+
+### 1.10 Run-length encoding of a list.
+encode <- function(ll) {
+  as.list(as.data.frame(mapply(
+    list,
+    rle(unlist(ll))$lengths,
+    rle(unlist(ll))$values
+  )))
+}
+encode(list("a", "a", "a", "a", "b", "c", "c", "a", "a", "d", "e", "e", "e", "e"))
+
+### 1.11 (*) Modified run-length encoding (so 1 item elements are just that element).
+encode_modified <- function(ll) {
+  lapply(encode(ll), function(x) {
+    if (x[[1]] == 1) { x <- x[2] } else { x }
+  })
+}
+encode_modified(list("a", "a", "a", "a", "b", "c", "c", "a", "a", "d", "e", "e", "e", "e"))
+
+### 1.12 (**) Decode a run-length encoded list. (decode(encode(x)) == x)
+decode <- function(ll) {
+  unname(as.list(unlist(lapply(ll, function(x) {
+    rep(x[[2]], x[[1]])
+  }))))
+}
+decode(encode(list("a", "a", "a", "a", "b", "c", "c", "a", "a", "d", "e", "e", "e", "e")))
