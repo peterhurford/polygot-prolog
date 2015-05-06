@@ -85,3 +85,11 @@ encode_direct <- function(ll) {
   ))))
 }
 encode_direct(list("a", "a", "a", "a", "b", "c", "c", "a", "a", "d", "e", "e", "e", "e"))
+
+### 1.14 (*) Duplicate the elements of a list.
+dupli <- function(ll) {
+  as.list(unlist(lapply(ll, function(x) {
+    rep(x, 2)
+  })))
+}
+dupli(list("a", "b", "c", "c", "d"))
