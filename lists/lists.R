@@ -52,13 +52,11 @@ pack <- function(ll) {
 }
 pack(list("a", "a", "a", "a", "b", "c", "c", "a", "a", "d", "e", "e", "e", "e"))
 
-### 1.10 Run-length encoding of a list.
+### 1.10 Run-length encoding of a list (using the solution from 1.09).
 encode <- function(ll) {
-  as.list(as.data.frame(mapply(
-    list,
-    rle(unlist(ll))$lengths,
-    rle(unlist(ll))$values
-  )))
+  lapply(pack(ll), function(x) {
+    list(x[[1]][[1]], length(x[[1]])) 
+  })
 }
 encode(list("a", "a", "a", "a", "b", "c", "c", "a", "a", "d", "e", "e", "e", "e"))
 
@@ -72,8 +70,18 @@ encode_modified(list("a", "a", "a", "a", "b", "c", "c", "a", "a", "d", "e", "e",
 
 ### 1.12 (**) Decode a run-length encoded list. (decode(encode(x)) == x)
 decode <- function(ll) {
-  unname(as.list(unlist(lapply(ll, function(x) {
+  as.list(unlist(lapply(ll, function(x) {
     rep(x[[2]], x[[1]])
-  }))))
+  })))
 }
 decode(encode(list("a", "a", "a", "a", "b", "c", "c", "a", "a", "d", "e", "e", "e", "e")))
+
+### 1.13 (**) Run-length encoding of a list (direct solution).
+encode_direct <- function(ll) {
+  unname(as.list(as.data.frame(mapply(
+    list,
+    rle(unlist(ll))$lengths,
+    rle(unlist(ll))$values
+  ))))
+}
+encode_direct(list("a", "a", "a", "a", "b", "c", "c", "a", "a", "d", "e", "e", "e", "e"))
